@@ -1,0 +1,12 @@
+services:
+  web:
+    build: ./app
+    command: python manage.py runserver 0.0.0.0:8000
+    #one-time for initialization with exact environment:
+    #command: django-admin startproject trust_score . && python manage.py migrate
+    volumes:
+      - ./app/:/usr/src/app/
+    ports:
+      - 8000:8000
+    env_file:
+      - ./.env.dev
