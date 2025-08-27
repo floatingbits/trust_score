@@ -1,2 +1,4 @@
 Django==4.2.3
 djangorestframework==3.16.1
+trustpilot-scraper==0.10
+openai==1.101.0

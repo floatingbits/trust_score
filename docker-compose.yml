@@ -6,8 +6,12 @@ services:
     #command: django-admin startproject trust_score . && python manage.py migrate
     volumes:
       - ./app/:/usr/src/app/
+      - app-venv:/opt/venv/
     ports:
       - 8000:8000
     env_file:
       - ./.env.dev
     user: 1000:1000
+
+volumes:
+  app-venv:
