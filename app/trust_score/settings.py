@@ -77,9 +77,17 @@ WSGI_APPLICATION = 'trust_score.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
+    'sqlite': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+    },
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': os.environ.get("MARIADB_DATABASE"),
+        'USER': os.environ.get("MARIADB_USER"),
+        'PASSWORD': os.environ.get("MARIADB_PASSWORD"),
+        'HOST': os.environ.get("MARIADB_HOST"),
+        'PORT': '',
     }
 }
 
@@ -127,5 +135,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10
+    'PAGE_SIZE': 30
 }

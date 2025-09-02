@@ -16,7 +16,7 @@ class ReviewPage(models.Model):
 class Review(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     text = models.TextField(blank=True, default='')
-    author_name = models.CharField(max_length=255,blank=True, default='')
+    author_name = models.CharField(max_length=255, blank=True, default='')
     rating = models.IntegerField()
     rated_date = models.DateTimeField(auto_now_add=False)
     review_page = models.ForeignKey(ReviewPage, related_name='reviews', on_delete=models.CASCADE)
@@ -27,17 +27,17 @@ class Review(models.Model):
         ordering = ['created']
 
 
-class TrustRating(models.Model):
+class TrustScore(models.Model):
     created = models.DateTimeField(auto_now_add=True)
-    depth_of_content = models.DecimalField(blank=True, null=True)
-    balance = models.DecimalField(blank=True, null=True)
-    authenticity = models.DecimalField(blank=True, null=True)
-    product_vs_sales = models.DecimalField(blank=True, null=True)
-    genericity = models.DecimalField(blank=True, null=True)
+    result_json = models.JSONField()
+    rating_algorithm_key = models.CharField(max_length=50)
+    rating_model_key = models.CharField(max_length=50)
+    rating_model_priority = models.IntegerField()
 
-    review = models.ForeignKey(Review, related_name='trust_ratings', on_delete=models.CASCADE)
+    review = models.ForeignKey(Review, related_name='trust_scores', on_delete=models.CASCADE)
 
     objects = models.Manager()
 
     class Meta:
         ordering = ['created']
+        unique_together = (("rating_algorithm_key", "rating_model_key", "review"),)

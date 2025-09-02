@@ -1,3 +1,5 @@
+import os
+
 from django.shortcuts import render
 
 # Create your views here.
@@ -12,6 +14,11 @@ from rest_framework.response import Response
 from trust_score.api.models import ReviewPage
 from trust_score.api.services.review_page_service import ReviewPageService
 from trust_score.api.domain.repository import ReviewPageRepository
+from trust_score.api.clients.gpt_client import GptClient
+
+from trust_score.api.services.trust_rating_training_service import TrustRatingTrainingDataService
+
+from trust_score.api.services.prompt_generator import PROMPT_DEFAULT, PromptGenerator
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -76,5 +83,20 @@ def review_page_scrape(request, pk):
         review_page_model = ReviewPage.objects.get(pk=pk)
         serializer = ReviewPageSerializer(review_page_model)
         return Response(serializer.data)
+    except ReviewPage.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['POST'])
+def review_page_generate_training_data(request, pk):
+    """
+    List all review pages, or create a new review_page.
+    """
+    try:
+        client = GptClient(os.environ.get("OPENAI_API_KEY"), "gpt-4.1")
+        prompt_generator = PromptGenerator(PROMPT_DEFAULT)
+        service = TrustRatingTrainingDataService(prompt_generator, client)
+        service.generate_trust_rating_training(pk)
+        return Response([])
     except ReviewPage.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)

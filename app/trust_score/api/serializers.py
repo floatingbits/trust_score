@@ -1,5 +1,5 @@
 from django.contrib.auth.models import Group, User
-from trust_score.api.models import ReviewPage, Review
+from trust_score.api.models import ReviewPage, Review, TrustScore
 from rest_framework import serializers
 
 
@@ -15,10 +15,18 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
         fields = ['url', 'name']
 
 
+class TrustScoreSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = TrustScore
+        fields = ['id', 'result_json', 'rating_algorithm_key', 'rating_model_key', 'rating_model_priority']
+
+
 class ReviewSerializer(serializers.ModelSerializer):
+    trust_scores = TrustScoreSerializer(many=True, read_only=True)
     class Meta:
         model = Review
-        fields = ['rating', 'text', 'rated_date', 'author_name', 'created']
+        fields = ['rating', 'text', 'rated_date', 'author_name', 'created', 'trust_scores']
 
 
 class ReviewPageSerializer(serializers.ModelSerializer):

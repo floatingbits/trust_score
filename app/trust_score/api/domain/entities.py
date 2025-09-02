@@ -21,4 +21,15 @@ class Review:
     rated_date: datetime.datetime
 
 
+@dataclass
+class TrustScore:
+    id: int | None
+    created: datetime.datetime
+    result_json: dict
+    rating_algorithm_key: str
+    rating_model_key: str
+    rating_model_priority: int
+    review: Review
+
+
 

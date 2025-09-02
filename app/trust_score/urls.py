@@ -30,6 +30,7 @@ urlpatterns = [
     path('', include(router.urls)),
     path('review-pages/', views.review_page_list),
     path('review-pages/<int:pk>/scrape', views.review_page_scrape),
+    path('review-pages/<int:pk>/generate-training-data', views.review_page_generate_training_data),
     path('review-pages/<int:pk>/', views.review_page_detail),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]

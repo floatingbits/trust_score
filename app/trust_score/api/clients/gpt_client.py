@@ -4,13 +4,15 @@ import re
 
 
 class GptClient:
-    def __init__(self, api_key):
+    def __init__(self, api_key: str, model: str):
         self.client = openai.OpenAI(api_key=api_key)
+        self.model = model
 
     def run_prompt(self, prompt: str) -> str:
         response = self.client.chat.completions.create(
-            model="gpt-4.1",
-            #model="gpt-4o-mini",
+            model=self.model,
+            # model="gpt-4.1",
+            # model="gpt-4o-mini",
             messages=[{"role": "user", "content": prompt}]
         )
         return response.choices[0].message.content

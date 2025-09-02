@@ -6,12 +6,30 @@ services:
     #command: django-admin startproject trust_score . && python manage.py migrate
     volumes:
       - ./app/:/usr/src/app/
-      - app-venv:/opt/venv/
     ports:
       - 8000:8000
     env_file:
       - ./.env.dev
+      - ./.env
     user: 1000:1000
 
+  db:
+    image: mariadb:11.8
+    restart: unless-stopped
+    env_file:
+      - ./.env.dev
+      - ./.env
+    volumes:
+      - mariadb_data:/var/lib/mysql
+      - mariadb_logs:/var/log/mysql
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
 volumes:
-  app-venv:
+  mariadb_data:
+    driver: local
+  mariadb_logs:
+    driver: local
